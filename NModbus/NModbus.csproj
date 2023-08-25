@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>NModbus is a C# implementation of the Modbus protocol. Provides connectivity to Modbus slave compatible devices and applications. Supports TCP, and UDP protocols.</Description>
@@ -14,8 +14,11 @@
     <Copyright>Copyright © 2020 Scott Alexander, 2015 Dmitry Turin, Rich Quackenbush, Jesse Beard</Copyright>
     <InformationalVersion>4.0.0-Debug</InformationalVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
-	  <NoWarn>1701;1702;1705;1591</NoWarn>
-	  <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+	<NoWarn>1701;1702;1705;1591</NoWarn>
+	<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
@@ -25,6 +28,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NModbus.Interfaces\NModbus.Interfaces.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+		<None Include="..\LICENSE.txt" Pack="true" PackagePath="" />
+		<None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

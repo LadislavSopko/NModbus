@@ -98,7 +98,7 @@ namespace NModbus
             return new ModbusSerialSlaveNetwork(transport, this, Logger);
         }
 
-        public IModbusSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener)
+        public IModbusTcpSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener)
         {
             return new ModbusTcpSlaveNetwork(tcpListener, this, Logger);
         }
@@ -116,6 +116,11 @@ namespace NModbus
         public IModbusAsciiTransport CreateAsciiTransport(IStreamResource streamResource)
         {
             return new ModbusAsciiTransport(streamResource, this, Logger);
+        }
+
+        public IModbusTransport CreateIpTransport(IStreamResource streamResource)
+        {
+            return new ModbusIpTransport(streamResource, this, Logger);
         }
 
         public IModbusLogger Logger { get; }
@@ -148,6 +153,15 @@ namespace NModbus
             var transport = new ModbusIpTransport(adapter, this, Logger);
 
             return new ModbusIpMaster(transport);
+        }
+
+        public IModbusMaster CreateMaster(Socket client)
+        {
+            var adapter = new SocketAdapter(client);
+
+            var transport = new ModbusRtuTransport(adapter, this, Logger);
+
+            return new ModbusSerialMaster(transport);
         }
 
         public IModbusFunctionService GetFunctionService(byte functionCode)

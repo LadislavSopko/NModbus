@@ -78,7 +78,7 @@ namespace NModbus
         /// </summary>
         /// <param name="tcpListener"></param>
         /// <returns></returns>
-        IModbusSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener);
+        IModbusTcpSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener);
 
         /// <summary>
         /// Creates a UDP modbus slave network.
@@ -104,6 +104,13 @@ namespace NModbus
         /// <param name="streamResource"></param>
         /// <returns></returns>
         IModbusAsciiTransport CreateAsciiTransport(IStreamResource streamResource);
+
+        /// <summary>
+        /// Creates an IP Transport
+        /// </summary>
+        /// <param name="streamResource"></param>
+        /// <returns></returns>
+        IModbusTransport CreateIpTransport(IStreamResource streamResource);
 
         #endregion
 

@@ -10,6 +10,7 @@
     <PackageTags>Modbus SerialPortStream Serial</PackageTags>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
 	  <NoWarn>1701;1702;1705;1591</NoWarn>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +20,8 @@
   <ItemGroup>
     <ProjectReference Include="..\NModbus.Interfaces\NModbus.Interfaces.csproj" />
     <ProjectReference Include="..\NModbus\NModbus.csproj" />
+    <None Include="..\LICENSE.txt" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

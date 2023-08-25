@@ -5,7 +5,7 @@ using System.Net;
 
 namespace NModbus.Message
 {
-    internal class ReadHoldingInputRegistersRequest : AbstractModbusMessage, IModbusRequest
+    public class ReadHoldingInputRegistersRequest : AbstractModbusMessage, IModbusRequest
     {
         public ReadHoldingInputRegistersRequest()
         {
@@ -48,7 +48,7 @@ namespace NModbus.Message
             return msg;
         }
 
-        public void ValidateResponse(IModbusMessage response)
+        public virtual void ValidateResponse(IModbusMessage response)
         {
             var typedResponse = response as ReadHoldingInputRegistersResponse;
             Debug.Assert(typedResponse != null, "Argument response should be of type ReadHoldingInputRegistersResponse.");
