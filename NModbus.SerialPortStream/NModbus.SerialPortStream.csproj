@@ -4,7 +4,7 @@
 
   <PropertyGroup>
 
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1</TargetFrameworks>
 
     <Authors>LGinC@github.com, Rich Quackenbush, Jesse Beard</Authors>
 
@@ -28,16 +28,16 @@
 
 
   <ItemGroup>
-    <PackageReference Include="SerialPortStream" Version="2.4.1" />
+    <ProjectReference Include="..\NModbus.Interfaces\NModbus.Interfaces.csproj" />
+    <ProjectReference Include="..\NModbus\NModbus.csproj" />
+    <None Include="..\LICENSE.txt" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 
 
   <ItemGroup>
-    <ProjectReference Include="..\NModbus.Interfaces\NModbus.Interfaces.csproj" />
-    <ProjectReference Include="..\NModbus\NModbus.csproj" />
-    <None Include="..\LICENSE.txt" Pack="true" PackagePath="" />
-    <None Include="README.md" Pack="true" PackagePath="" />
+    <PackageReference Include="RJCP.SerialPortStream" Version="3.0.1" />
   </ItemGroup>
 
 

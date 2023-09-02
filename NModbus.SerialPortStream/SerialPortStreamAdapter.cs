@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using NModbus.IO;
 
 namespace NModbus.SerialPortStream
@@ -15,7 +16,7 @@ namespace NModbus.SerialPortStream
             _serialPortStream = serialPortStream;
         }
 
-        public int InfiniteTimeout => RJCP.IO.Ports.SerialPortStream.InfiniteTimeout;
+        public int InfiniteTimeout => Timeout.Infinite; //RJCP.IO.Ports.SerialPortStream.InfiniteTimeout;
 
         public int ReadTimeout
         {
