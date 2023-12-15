@@ -145,7 +145,7 @@
 //            };
 
 //            slave.ApplyRequest(request);
-//            Assert.True(eventFired);
+//            Assert.That(eventFired);
 //        }
 //#endif
 

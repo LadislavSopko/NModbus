@@ -70,7 +70,7 @@ namespace NModbus.UnitTests.IO
             var message = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 17, 19, 37);
             byte[] frame = { 17, ModbusFunctionCodes.ReadCoils, 0, 19, 0, 37, 182 };
 
-            Assert.True(transport.ChecksumsMatch(message, frame));
+            Assert.That(transport.ChecksumsMatch(message, frame));
         }
 
         [Fact]

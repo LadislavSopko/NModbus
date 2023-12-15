@@ -240,7 +240,7 @@ namespace NModbus.UnitTests.Message
         [Obsolete("Test to fix, but we need help of autor.")]
         public void CreateModbusMessageReadWriteMultipleRegistersRequest()
         {
-            Assert.True(true);
+            Assert.That(true);
             //ReadWriteMultipleRegistersRequest request =
             //    ModbusMessageFactory.CreateModbusMessage<ReadWriteMultipleRegistersRequest>(new byte[]
             //    { 0x05, 0x17, 0x00, 0x03, 0x00, 0x06, 0x00, 0x0e, 0x00, 0x03, 0x06, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff });

@@ -40,7 +40,7 @@ namespace NModbus.UnitTests.Message
                                                   !messageType.BaseType.IsAbstract &&
                                                   messageType.BaseType.GetMethod("ToString",
                                                     BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly) != null;
-                Assert.True(hasDirectOverride || nonAbstractBaseHasOverride);
+                Assert.That(hasDirectOverride || nonAbstractBaseHasOverride);
             }
         }
 
