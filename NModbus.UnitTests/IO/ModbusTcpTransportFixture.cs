@@ -123,7 +123,7 @@ namespace NModbus.UnitTests.IO
             response.TransactionId = 4;
             transport.RetryOnOldResponseThreshold = 3;
 
-            Assert.That(transport.OnShouldRetryResponse(request, response));
+            Assert.True(transport.OnShouldRetryResponse(request, response));
         }
 
         [Fact]
