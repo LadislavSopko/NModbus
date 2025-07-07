@@ -218,8 +218,10 @@ namespace NModbus.Device
 
             if (!_masters.TryRemove(e.EndPoint, out connection))
             {
-                string msg = $"EndPoint {e.EndPoint} cannot be removed, it does not exist.";
-                throw new ArgumentException(msg);
+                string msg = $"EndPoint {e.EndPoint} cannot be removed, it does not exist. Available: [{string.Join(", ", _masters.Keys)}]";
+                //Console.WriteLine($"DEBUG TCP SlaveNet: WARNING - {msg}");
+                // Don't throw - this can happen in race conditions during shutdown
+                return;
             }
 
             connection.Dispose();

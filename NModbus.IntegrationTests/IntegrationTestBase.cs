@@ -24,11 +24,26 @@ namespace Modbus.IntegrationTests
             {
                 var dataStore = new DefaultSlaveDataStore();
 
+                // DEBUG: Verify data is written to datastore
                 dataStore.HoldingRegisters.WritePoints(startingAddress, values);
+                var writtenData = dataStore.HoldingRegisters.ReadPoints(startingAddress, (ushort)values.Length);
+                Console.WriteLine($"DEBUG: Data written to datastore at {startingAddress}: [{string.Join(", ", writtenData)}]");
 
-                c.SlaveNetwork.AddSlave(Factory.CreateSlave(1, dataStore));
+                // DEBUG: Create and verify slave
+                var slave = Factory.CreateSlave(1, dataStore);
+                Console.WriteLine($"DEBUG: Created slave with UnitId: {slave.UnitId}");
+                
+                c.SlaveNetwork.AddSlave(slave);
+                
+                // DEBUG: Verify slave is registered
+                var retrievedSlave = c.SlaveNetwork.GetSlave(1);
+                Console.WriteLine($"DEBUG: Slave retrieved from network: {retrievedSlave != null}");
+                
+                // DEBUG: Add small delay to ensure connection is established
+                System.Threading.Thread.Sleep(100);
                 
                 var registers = c.Master.ReadHoldingRegisters(1, startingAddress, (ushort)values.Length);
+                Console.WriteLine($"DEBUG: Read from master: [{string.Join(", ", registers)}]");
 
                 Assert.Equal(values, registers);
 
@@ -67,11 +82,35 @@ namespace Modbus.IntegrationTests
             {
                 var dataStore = new DefaultSlaveDataStore();
 
+                // DEBUG: Verify initial data is written to datastore
                 dataStore.HoldingRegisters.WritePoints(startReadAddress, registersToRead);
+                var writtenData = dataStore.HoldingRegisters.ReadPoints(startReadAddress, (ushort)registersToRead.Length);
+                Console.WriteLine($"DEBUG ReadWrite: Initial data written to datastore at {startReadAddress}: [{string.Join(", ", writtenData)}]");
 
-                c.SlaveNetwork.AddSlave(Factory.CreateSlave(1, dataStore));
+                // DEBUG: Create and verify slave
+                var slave = Factory.CreateSlave(1, dataStore);
+                Console.WriteLine($"DEBUG ReadWrite: Created slave with UnitId: {slave.UnitId}");
+                
+                c.SlaveNetwork.AddSlave(slave);
+                
+                // DEBUG: Verify slave is registered
+                var retrievedSlave = c.SlaveNetwork.GetSlave(1);
+                Console.WriteLine($"DEBUG ReadWrite: Slave retrieved from network: {retrievedSlave != null}");
+                
+                // DEBUG: Add small delay
+                System.Threading.Thread.Sleep(100);
 
+                Console.WriteLine($"DEBUG ReadWrite: About to call ReadWriteMultipleRegistersAsync(slaveId=1, readAddr={startReadAddress}, readLen={registersToRead.Length}, writeAddr={startWriteAddress}, writeData=[{string.Join(", ", registersToWrite)}])");
+                
                 var registersThatWereRead = await c.Master.ReadWriteMultipleRegistersAsync(1, startReadAddress, (ushort)registersToRead.Length, startWriteAddress, registersToWrite);
+                Console.WriteLine($"DEBUG ReadWrite: Read result: [{string.Join(", ", registersThatWereRead)}]");
+                
+                // DEBUG: Check if the read data was overwritten by the write operation
+                var dataAfterReadWrite = dataStore.HoldingRegisters.ReadPoints(startReadAddress, (ushort)registersToRead.Length);
+                Console.WriteLine($"DEBUG ReadWrite: Data at read address {startReadAddress} after ReadWrite operation: [{string.Join(", ", dataAfterReadWrite)}]");
+                
+                var finalWrittenData = dataStore.HoldingRegisters.ReadPoints(startWriteAddress, (ushort)registersToWrite.Length);
+                Console.WriteLine($"DEBUG ReadWrite: Final written data at {startWriteAddress}: [{string.Join(", ", finalWrittenData)}]");
 
                 Assert.Equal(registersToRead, registersThatWereRead);
                 Assert.Equal(registersToWrite, dataStore.HoldingRegisters.ReadPoints(startWriteAddress, (ushort)registersToWrite.Length));
@@ -85,19 +124,29 @@ namespace Modbus.IntegrationTests
             using (var cancellationTokenSource = new CancellationTokenSource())
             using (var slaveNetwork = await CreateSlaveNetworkAsync())
             using (var listenTask = Task.Factory.StartNew(async () => await slaveNetwork.ListenAsync(cancellationTokenSource.Token), TaskCreationOptions.LongRunning))
-            using (var master = await CreateMasterAsync())
             {
-                //Create some context
-                var context = new IntegrationTestContext(master, slaveNetwork);
+                // Add small delay to ensure server is listening
+                await Task.Delay(50);
+                
+                using (var master = await CreateMasterAsync())
+                {
+                    Console.WriteLine($"DEBUG TestAsync: Created master connection");
+                    
+                    //Create some context
+                    var context = new IntegrationTestContext(master, slaveNetwork);
 
-                //Performt the test
-                await test(context);
+                    //Performt the test
+                    await test(context);
+                    
+                    Console.WriteLine($"DEBUG TestAsync: Test completed, disposing master");
+                }
 
                 //Cancel the listenTask
                 cancellationTokenSource.Cancel();
 
                 //Wait for the listenTask to complete
                 await listenTask;
+                Console.WriteLine($"DEBUG TestAsync: Listen task completed");
             }
         }
 
