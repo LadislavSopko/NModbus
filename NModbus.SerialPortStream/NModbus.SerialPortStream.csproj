@@ -19,8 +19,9 @@
     <PackageTags>Modbus SerialPortStream Serial</PackageTags>
 
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <MyNoWarn Condition="'$(BuildingInsideVisualStudio)' != 'true'">$(NoWarn);CS8073;CS8601;CS8767;NU1701;CS8618;CS8600;CS8602;CS8603;CS8604;CS8625;CS8622;CS8632;CS0618;CS0162;CS0168;CS0219;CS0414;CS0169;CS0067;CS8766;CS0693;CS0809;CS1998;MSB3277</MyNoWarn>
 
-	  <NoWarn>1701;1702;1705;1591</NoWarn>
+	  <NoWarn>$(NoWarn);1701;1702;1705;1591</NoWarn>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 
   </PropertyGroup>
