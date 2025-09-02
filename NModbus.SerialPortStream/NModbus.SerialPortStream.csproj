@@ -20,7 +20,7 @@
 
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
 
-	  <NoWarn>1701;1702;1705;1591</NoWarn>
+	  <NoWarn>1701;1702;1705;1591;NU1701</NoWarn>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
