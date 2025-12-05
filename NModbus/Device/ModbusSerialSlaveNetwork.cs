@@ -23,6 +23,12 @@ namespace NModbus.Device
 
         private IModbusSerialTransport SerialTransport => _serialTransport;
 
+        public override Task StartAsync(CancellationToken cancellationToken = default)
+        {
+            // Serial transport has no separate start phase; listening begins immediately.
+            return Task.CompletedTask;
+        }
+
         public override Task ListenAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             while (!cancellationToken.IsCancellationRequested)

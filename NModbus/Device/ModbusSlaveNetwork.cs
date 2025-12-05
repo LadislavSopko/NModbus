@@ -33,6 +33,14 @@ namespace NModbus.Device
         public abstract Task ListenAsync(CancellationToken cancellationToken = new CancellationToken());
 
         /// <summary>
+        /// Prepare the network to listen. Default no-op; override if a bind/start phase is required.
+        /// </summary>
+        public virtual Task StartAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
         /// Apply the request.
         /// </summary>
         /// <param name="request"></param>

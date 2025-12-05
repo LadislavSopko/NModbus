@@ -16,6 +16,12 @@ namespace NModbus
         Task ListenAsync(CancellationToken cancellationToken = new CancellationToken());
 
         /// <summary>
+        /// Prepare the network to listen (bind/start). Should complete once ready to accept connections.
+        /// Default implementations may no-op.
+        /// </summary>
+        Task StartAsync(CancellationToken cancellationToken = new CancellationToken());
+
+        /// <summary>
         /// Add a slave to the network.
         /// </summary>
         /// <param name="slave"></param>

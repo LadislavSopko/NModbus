@@ -25,7 +25,6 @@ namespace Modbus.IntegrationTests
                 var dataStore = new DefaultSlaveDataStore();
 
                 dataStore.HoldingRegisters.WritePoints(startingAddress, values);
-
                 c.SlaveNetwork.AddSlave(Factory.CreateSlave(1, dataStore));
                 
                 var registers = c.Master.ReadHoldingRegisters(1, startingAddress, (ushort)values.Length);
@@ -84,20 +83,21 @@ namespace Modbus.IntegrationTests
         {
             using (var cancellationTokenSource = new CancellationTokenSource())
             using (var slaveNetwork = await CreateSlaveNetworkAsync())
-            using (var listenTask = Task.Factory.StartNew(async () => await slaveNetwork.ListenAsync(cancellationTokenSource.Token), TaskCreationOptions.LongRunning))
-            using (var master = await CreateMasterAsync())
             {
-                //Create some context
-                var context = new IntegrationTestContext(master, slaveNetwork);
+                // start listener
+                await slaveNetwork.StartAsync(cancellationTokenSource.Token);
+                var listenTask = Task.Run(() => slaveNetwork.ListenAsync(cancellationTokenSource.Token));
 
-                //Performt the test
-                await test(context);
+                using (var master = await CreateMasterAsync())
+                {
+                    var context = new IntegrationTestContext(master, slaveNetwork);
 
-                //Cancel the listenTask
+                    await test(context);
+                }
+
                 cancellationTokenSource.Cancel();
-
-                //Wait for the listenTask to complete
                 await listenTask;
+
             }
         }
 

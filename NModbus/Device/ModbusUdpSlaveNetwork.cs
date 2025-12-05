@@ -26,6 +26,12 @@ namespace NModbus.Device
             _udpClient = udpClient;
         }
 
+        public override Task StartAsync(CancellationToken cancellationToken = default)
+        {
+            // UDP transport is connectionless; nothing to prime before ListenAsync.
+            return Task.CompletedTask;
+        }
+
         /// <summary>
         ///     Start slave listening for requests.
         /// </summary>
@@ -76,11 +82,15 @@ namespace NModbus.Device
                 }
                 catch (SocketException se)
                 {
-                    // this hapens when slave stops
-                    if (se.SocketErrorCode != SocketError.Interrupted)
+                    // expected when stopping or disposing
+                    if (cancellationToken.IsCancellationRequested ||
+                        se.SocketErrorCode == SocketError.Interrupted ||
+                        se.SocketErrorCode == SocketError.OperationAborted)
                     {
-                        throw;
+                        return;
                     }
+
+                    throw;
                 }
             }
         }

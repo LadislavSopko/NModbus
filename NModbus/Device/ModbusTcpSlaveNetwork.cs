@@ -40,6 +40,15 @@ namespace NModbus.Device
             _server = tcpListener;
         }
 
+        /// <summary>
+        /// Starts the TCP listener. Readiness is immediate after Start(); accept loop runs in ListenAsync.
+        /// </summary>
+        public override Task StartAsync(CancellationToken cancellationToken = default)
+        {
+            Server.Start();
+            return Task.CompletedTask;
+        }
+
 #if TIMER
         private ModbusTcpSlave(byte unitId, TcpListener tcpListener, double timeInterval)
             : base(unitId, new EmptyTransport())
@@ -129,7 +138,11 @@ namespace NModbus.Device
                 }
                 catch (ObjectDisposedException) when (cancellationToken.IsCancellationRequested)
                 { 
-                    //Swallow this
+                    //Swallow expected disposal during cancellation
+                }
+                catch (SocketException) when (cancellationToken.IsCancellationRequested)
+                {
+                    // Listener stopped due to cancellation; safe to exit
                 }
                 catch (InvalidOperationException)
                 {
